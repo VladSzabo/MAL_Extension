@@ -7,30 +7,39 @@
 </head>
 
 <body style="width:20em">
-    <div style="padding-left: 1em;padding-right: 1em;">
+    <div style="padding-left: 1em; padding-right: 1em;">
         <h2 align="center">MAL Extension</h2>
         
         <div class="form-group" style="padding-top: 0.3em">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" checked> Eliminate completed anime
+                    <input id="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
                 </label>
                 <label>
-                    <input type="checkbox" checked> See common anime with other users
+                    <input id="check" type="checkbox" name="Common" checked> See common anime with other users
                 </label>
                 <label>
-                    <input type="checkbox" checked> More advanced search 
+                    <input id="check" type="checkbox" name="Advanced" checked> More advanced search 
                 </label>
             </div>
         </div>
     </div>
 
-    <hr></hr>
+    <hr style="margin: 0px; padding: 0px;">
 
-</body>
+    <div class="pull-right" style="padding: 0.2em">
 
-<footer>
+        Github/Creator page:
+
+        <a target="_blank" href="https://github.com/VladSzabo/MAL_Extension">
+        <img src="images/github.png" style="width:2em; height: 2em;"></img></a>
+        
+        <a target="_blank" href="https://myanimelist.net/profile/NoxErinys">
+        <img src="images/mal.png" style="width: 1.6em; height: 1.6em;"></img></a>
+
+    </div>
+
     <script src="popup.js"></script>
-</footer>
+</body>
 
 </html>

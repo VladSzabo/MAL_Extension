@@ -2,15 +2,17 @@
   "manifest_version": 2,
 
   "name": "MAL Extension",
-  "description": "MAL searching improved",
   "version": "1.0",
+  "description": "MAL searching improved",
+
+  "content_scripts": [{
+    "matches": ["https://myanimelist.net/*"],
+    "js": ["content.js"]
+  }],
 
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-  "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
-  ]
+  "permissions": ["activeTab", "storage"]
 }
