@@ -7,7 +7,7 @@
 
   "content_scripts": [{
     "matches": ["https://myanimelist.net/*"],
-    "js": ["content.js"]
+    "js": ["scripts/library.js", "scripts/content.js"]
   }],
 
   "browser_action": {

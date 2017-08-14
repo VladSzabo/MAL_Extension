@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>MAL Extension</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/cosmo/bootstrap.min.css">
 </head>
@@ -9,17 +11,20 @@
 <body style="width:20em">
     <div style="padding-left: 1em; padding-right: 1em;">
         <h2 align="center">MAL Extension</h2>
-        
+
         <div class="form-group" style="padding-top: 0.3em">
             <div class="checkbox">
-                <label>
-                    <input id="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
-                </label>
                 <label>
                     <input id="check" type="checkbox" name="Common" checked> See common anime with other users
                 </label>
                 <label>
                     <input id="check" type="checkbox" name="Advanced" checked> More advanced search 
+                </label>
+                <label>
+                    <input id="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
+                </label>
+                <label id="bonus" style="padding-left: 3em">
+                    <input id="check" type="checkbox" name="Bonus"> Keep table size (longer load)
                 </label>
             </div>
         </div>
@@ -33,13 +38,13 @@
 
         <a target="_blank" href="https://github.com/VladSzabo/MAL_Extension">
         <img src="images/github.png" style="width:2em; height: 2em;"></img></a>
-        
+
         <a target="_blank" href="https://myanimelist.net/profile/NoxErinys">
         <img src="images/mal.png" style="width: 1.6em; height: 1.6em;"></img></a>
 
     </div>
 
-    <script src="popup.js"></script>
+    <script src="scripts/popup.js"></script>
 </body>
 
 </html>
