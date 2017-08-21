@@ -6,30 +6,43 @@
 
     <title>MAL Extension</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/cosmo/bootstrap.min.css">
+    
 </head>
 
-<body style="width:20em">
+<body style="width: 20em">
     <div style="padding-left: 1em; padding-right: 1em;">
         <h2 align="center">MAL Extension</h2>
 
         <div class="form-group" style="padding-top: 0.3em">
             <div class="checkbox">
                 <label>
-                    <input id="check" type="checkbox" name="Common" checked> See common anime with other users
+                    <input id="check" type="checkbox" name="Shared" checked> See shared PTW anime with users
                 </label>
+                    <label id="bonusShared" style="padding-left: 2.7em">
+                        <input id="check" type="checkbox" name="BonusShared"> Nice view (longer load)
+                    </label>
                 <label>
                     <input id="check" type="checkbox" name="Advanced" checked> More advanced search 
                 </label>
                 <label>
+                    <input id="check" type="checkbox" name="Websites" checked> See score from other websites
+                </label>
+                    <label id="bonusWebsites" style="padding-left: 2.7em">
+                        <input id="check" type="checkbox" name="Kitsu"> Kitsu
+                    </label> <br>
+                    <label id="bonusWebsites" style="padding-left: 2.7em">
+                        <input id="check" type="checkbox" name="Anime-planet"> Anime-planet
+                    </label>
+                <label>
                     <input id="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
                 </label>
-                <label id="bonus" style="padding-left: 3em">
-                    <input id="check" type="checkbox" name="Bonus"> Keep table size (longer load)
-                </label>
+                    <label id="bonusEliminate" style="padding-left: 2.7em">
+                        <input id="check" type="checkbox" name="BonusEliminate"> Keep table size (longer load)
+                    </label>
             </div>
         </div>
     </div>
-
+    
     <hr style="margin: 0px; padding: 0px;">
 
     <div class="pull-right" style="padding: 0.2em">

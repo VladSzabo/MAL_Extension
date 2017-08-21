@@ -1,28 +1,32 @@
-function change(e){
+function change(e) {
     var jsonVar = {};
     jsonVar[e.target.name] = e.target.checked;
     chrome.storage.local.set(jsonVar);
 
-    if(e.target.name == "Eliminate")
-        if(!e.target.checked)
-            document.getElementById("bonus").className = "hidden";
+    if (elementsWithBonuses.indexOf(e.target.name) != -1)
+        if (!e.target.checked)
+            document.querySelectorAll("#bonus" + e.target.name).forEach((el) => { el.className = "hidden"; });
         else
-            document.getElementById("bonus").className = "";
+            document.querySelectorAll("#bonus" + e.target.name).forEach((el) => { el.className = ""; });
 }
 
-document.querySelectorAll("#check").forEach((el) => {el.addEventListener("click", change);});
+var elementsWithBonuses = ["Eliminate", "Shared", "Websites"];
+document.querySelectorAll("#check").forEach((el) => { el.addEventListener("click", change); });
 
-chrome.storage.local.get(null, function(items) {
-    var allKeys = Object.keys(items);
+chrome.storage.local.get(null, function (items) {
+    var defaultValues = { "Eliminate": true, "Shared": true, "Advanced": true, "BonusEliminate": false, "BonusShared": false, "Kitsu": false, "Anime-planet": false };
 
-    if(allKeys.length == 0){
-        chrome.storage.local.set({"Eliminate": true, "Common": true, "Advanced": true, "Bonus": false});
+    if (Object.keys(items).length == 0) {
+        chrome.storage.local.set(defaultValues);
     }
-    else{
-        for(var i=0;i<4;i++){
-            document.getElementsByName(allKeys[i])[0].checked = items[allKeys[i]];
+    else {
+        var keys = Object.keys(defaultValues);
+
+        for (var i = 0; i < keys.length; i++) {
+            document.getElementsByName(keys[i])[0].checked = items[keys[i]];
+            
+            if(elementsWithBonuses.indexOf(keys[i]) != -1 && !items[keys[i]])
+                document.querySelectorAll("#bonus" + keys[i]).forEach((el) => { el.className = "hidden"; });
         }
-        if(!items["Eliminate"])
-            document.getElementById("bonus").className = "hidden";
-    }  
+    }
 });

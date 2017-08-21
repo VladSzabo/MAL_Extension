@@ -13,4 +13,6 @@ function getElements(doc, specifications) {
         return doc.getElementsByClassName(specifications["class"]);
     else if ("tag" in specifications)
         return doc.getElementsByTagName(specifications["tag"]);
+    else if ("id" in specifications)
+        return [doc.getElementById(specifications["id"])];
 }
