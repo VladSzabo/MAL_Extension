@@ -1,14 +1,24 @@
-function removeUnwantedElements(doc, target, criteria, startFrom, compare) {
-    var elements = getElements(doc, target);
+function removeUnwantedElements(target, criteria, startFrom, compare) {
+    var elements = getElements(document, target);
     var deleted = 0, found = false, indexFound = -1;
 
+    // Find already listed anime in previous pages
     if (startFrom && compare) {
-        var doc = document.createElement("div");
-        doc.innerHTML = startFrom;
+        var doc = document.createElement("div"); doc.innerHTML = startFrom;
 
         for (var i = 0; i < elements.length; i++) {
-            var el1 = getElements(elements[i], compare), el2 = getElements(doc, compare);
-            if (el1.length > 0 && el2.length > 0 && el1[0].outerHTML == el2[0].outerHTML) {
+            var all = true;
+
+            for (var j = 0; j < compare.length; j++) {
+                var el1 = getElements(elements[i], compare[j]), el2 = getElements(doc, compare[j]);
+
+                if (!(el1.length > 0 && el2.length > 0 && el1[0].outerHTML == el2[0].outerHTML)) {
+                    all = false;
+                    break;
+                }
+            }
+
+            if (all) {
                 found = true;
                 indexFound = i;
                 break;
@@ -48,7 +58,7 @@ function determineNewUrl(lastUrl, templateUrl) {
     return newUrl;
 }
 
-function addWantedAnime(nr, templateUrl, container, target, criteria, oldUrl) {
+function addWantedAnime(nr, templateUrl, container, target, criteria, nextTargets, oldUrl) {
     oldUrl = oldUrl || url;
     newUrl = determineNewUrl(oldUrl, templateUrl);
     containerBody = getElements(document, container)[container["number"] || 0];
@@ -70,40 +80,14 @@ function addWantedAnime(nr, templateUrl, container, target, criteria, oldUrl) {
                 break;
 
         if (nr > 0)
-            addWantedAnime(nr, templateUrl, container, target, criteria, newUrl);
+            addWantedAnime(nr, templateUrl, container, target, criteria, nextTargets, newUrl);
         else
-            changeNextPageUrl(newUrl);
+            changeNextPageUrl(newUrl, nextTargets);
     });
 }
 
-function updateAnimeTable(target, criteriaText, templateUrl, container, bonus, compare) {
-    chrome.storage.local.get(null, function (items) {
-        var criteriaRemove, criteriaAdd;
-
-        if (!Array.isArray(criteriaText)) {
-            criteriaRemove = function (element) {
-                return element.innerHTML.indexOf(criteriaText) != -1;
-            }
-            criteriaAdd = function (element) {
-                return element.innerHTML.indexOf(criteriaText) == -1;
-            }
-        }
-        else {
-            criteriaRemove = function (element) {
-                return element.innerHTML.indexOf(criteriaText[0]) != -1 && element.innerHTML.indexOf(criteriaText[1]) != -1;
-            }
-            criteriaAdd = function (element) {
-                return element.innerHTML.indexOf(criteriaText[0]) == -1 && element.innerHTML.indexOf(criteriaText[1]) != -1;
-            }
-        }
-        var results = removeUnwantedElements(document, target, criteriaRemove, items["startFrom"], compare);
-
-        if (bonus)
-            addWantedAnime(results["deleted"], templateUrl, container, target, criteriaAdd);
-    });
-}
-
-function changeNextPageUrl(url) {
+function changeNextPageUrl(url, nextTargets) {
+    // Changes 'Next 50' link so that it skips unwanted anime
     if (nextTargets) {
         nextTargets = getElements(document, nextTargets);
 
@@ -112,6 +96,181 @@ function changeNextPageUrl(url) {
     }
 }
 
+function eliminateOption(items) {
+    var params = null;
+
+    if (url.indexOf(mal + "topanime") == 0)
+        params = {
+            target: { "class": "ranking-list" },
+            criteriaRemove: function (element) { return element.innerHTML.indexOf("Completed") != -1; },
+            criteriaAdd: function (element) { return element.innerHTML.indexOf("Completed") == -1; },
+            templateUrl: "?limit=<0+50>",
+            container: { "tag": "tbody" },
+            compare: [{ "class": "information di-ib mt4" }, { "tag": "span" }],
+            bonus: items["BonusEliminate"],
+            nextTargets: { "class": "link-blue-box next" }
+        }
+
+    else if (url.indexOf(mal + "anime/genre") == 0 || url.indexOf(mal + "anime/producer") == 0)
+        params = {
+            target: { "class": "seasonal-anime js-seasonal-anime" },
+            criteriaRemove: function (element) { return element.innerHTML.indexOf("CMPL") != -1; },
+            criteriaAdd: function (element) { return element.innerHTML.indexOf("CMPL") == -1; },
+            templateUrl: "?page=<1+1>",
+            container: { "class": "seasonal-anime-list clearfix" },
+            compare: [{ "class": "title-text" }],
+            bonus: items["BonusEliminate"]
+        }
+
+    else if (url.indexOf(mal + "anime/season") == 0)
+        params = {
+            target: { "class": "seasonal-anime js-seasonal-anime" },
+            criteriaRemove: function (element) { return element.innerHTML.indexOf("CMPL") != -1; },
+            criteriaAdd: function (element) { return element.innerHTML.indexOf("CMPL") == -1; },
+            templateUrl: null,
+            container: null,
+            compare: null,
+            bonus: false
+        }
+
+    else if (url.indexOf(mal + "anime.php?") == 0)
+        params = {
+            target: { "tag": "tr" },
+            criteriaRemove: criteriaRemove = function (element) {
+                return element.innerHTML.indexOf("CMPL") != -1 && element.innerHTML.indexOf("pt4") != -1;
+            },
+            criteriaAdd: function (element) {
+                return element.innerHTML.indexOf("CMPL") == -1 && element.innerHTML.indexOf("pt4") != -1;
+            },
+            templateUrl: "&show=<0+50>",
+            container: { "tag": "tbody", "number": 2 },
+            compare: [{ "class": "pt4" }],
+            bonus: items["BonusEliminate"]
+        }
+
+    if (params) {
+        var results = removeUnwantedElements(params.target, params.criteriaRemove, items["startFrom"], params.compare);
+
+        if (params.bonus)
+            addWantedAnime(results["deleted"], params.templateUrl, params.container, params.target, params.criteriaAdd, params.nextTargets);
+    }
+}
+
+function getAnimeList(doc) {
+    var allAnime = [], elements = getElements(doc, { "tag": "a" });
+
+    for (var i = 0; i < elements.length; i++) {
+        var href = elements[i].href;
+        if (href.indexOf("/anime/") != -1 && href.indexOf("ownlist") == -1
+            && allAnime.indexOf(href) == -1 && href.indexOf("/video") == -1)
+            allAnime.push(elements[i].href.replace("https://myanimelist.net", ''));
+    }
+
+    if (allAnime.length < 1) {
+        if (doc.getElementsByTagName("table")[0].getAttribute("data-items")) {
+            var json = JSON.parse(doc.getElementsByTagName("table")[0].getAttribute("data-items"));
+
+            for (var i = 0; i < json.length; i++)
+                allAnime.push(json[i]["anime_url"]);
+        }
+    }
+    return allAnime;
+}
+
+function showSharedPTWAnime(niceView) {
+    var splitQ = url.split('?')[1], splitAnd = splitQ.split('&');
+    var user1 = splitAnd[0].split("u1=")[1], user2 = splitAnd[1].split("u2=")[1];
+    var user1List, user2List;
+
+    //Formatting the headers
+    document.getElementsByClassName("h1")[0].innerHTML = "Shared PTW Anime";
+    var content = document.getElementById("content");
+    content.innerHTML = "";
+
+    var templateHeaders = `<div class="spaceit"><a href="#u1">Unique to @user1</a> | <a href="#u2">Unique to @user2</a></div>
+            <h2>Shared PTW Anime Between <a href="/profile/@user1">@user1</a> and <a href="/profile/@user2">@user2</a></h2>`;
+    templateHeaders = templateHeaders.replace(/@user1/g, user1).replace(/@user2/g, user2);
+
+    content.innerHTML += templateHeaders;
+
+    httpGetAsync("https://myanimelist.net/animelist/" + user1 + "?status=6", function (response) {
+        var doc = document.createElement("div");
+        doc.innerHTML = response;
+        user1List = getAnimeList(doc);
+
+        httpGetAsync("https://myanimelist.net/animelist/" + user2 + "?status=6", function (response) {
+            doc.innerHTML = response;
+            user2List = getAnimeList(doc);
+
+            if (!niceView) {
+                content.innerHTML += `<table border="0" cellpading="0" cellspacing="0" width="100%"> <tbody>
+                <tr><td class="borderClass"><a id="title" href=""><strong>Title</strong></a></td></tr>`;
+
+                var shared = intersect(user1List, user2List);
+                var tableBody = content.getElementsByTagName("tbody")[0];
+
+                shared.forEach(function (e) {
+                    var parts = e.split("/");
+                    tableBody.innerHTML += `
+                    <tr><td class="borderClass"><a href="` + e + `">` + parts[3].replace(/_/g, ' ') + `</a> 
+                    <a href="https://myanimelist.net/ownlist/anime/` + parts[2] + `/edit?hideLayout=1" title="Completed" class="Lightbox_AddEdit button_edit">edit</a></td></tr>`;
+                });
+
+                content.innerHTML += `<a name="u1"></a><h2>Unique to <a href="/profile/` + user1 + `">` + user1 + `</a></h2>
+                <table border="0" cellpading="0" cellspacing="0" width="100%"> <tbody>
+                <tr><td class="borderClass"><a id="title" href=""><strong>Title</strong></a></td></tr>`;
+
+                var uniqueUser1 = unique(user1List, user2List);
+                tableBody = content.getElementsByTagName("tbody")[1];
+
+                uniqueUser1.forEach(function (e) {
+                    var parts = e.split("/");
+                    tableBody.innerHTML += `
+                    <tr><td class="borderClass"><a href="` + e + `">` + parts[3].replace(/_/g, ' ') + `</a> 
+                    <a href="https://myanimelist.net/ownlist/anime/` + parts[2] + `/edit?hideLayout=1" title="Completed" class="Lightbox_AddEdit button_edit">edit</a></td></tr>`;
+                });
+
+                content.innerHTML += `<a name="u2"></a><h2>Unique to <a href="/profile/` + user2 + `">` + user2 + `</a></h2>
+                <table border="0" cellpading="0" cellspacing="0" width="100%"> <tbody>
+                <tr><td class="borderClass"><a id="title" href=""><strong>Title</strong></a></td></tr>`;
+
+                var uniqueUser2 = unique(user2List, user1List);
+                tableBody = content.getElementsByTagName("tbody")[2];
+
+                uniqueUser2.forEach(function (e) {
+                    var parts = e.split("/");
+                    tableBody.innerHTML += `
+                    <tr><td class="borderClass"><a href="` + e + `">` + parts[3].replace(/_/g, ' ') + `</a> 
+                    <a href="https://myanimelist.net/ownlist/anime/` + parts[2] + `/edit?hideLayout=1" title="Completed" class="Lightbox_AddEdit button_edit">edit</a></td></tr>`;
+                });
+            }
+            else{
+
+            }
+
+        })
+    })
+}
+
+function sharedOption(items) {
+    if (url.indexOf(mal + "animelist") == 0) {
+        // Add new option to page
+        var links = document.getElementsByTagName("a"), found = false, element;
+
+        for (var i = 0; i < links.length; i++)
+            if (links[i].href.indexOf("sharedanime.php") != -1) {
+                found = true;
+                element = links[i];
+                break;
+            }
+        if (found) {
+            element.parentElement.innerHTML += "| <a href=\"" + element.href + "?ptw\">Shared PTW Anime</a>";
+        }
+    }
+    else if (url.indexOf(mal + "shared.php") == 0 && url.indexOf("?ptw") != -1) {
+        showSharedPTWAnime(items["BonusShared"]);
+    }
+}
 /*function getUserName() {
     var text = document.getElementsByTagName("body")[0].innerHTML.split("window.MAL.USER_NAME")[1];
     var found = 0, i = 0;
@@ -128,66 +287,17 @@ function changeNextPageUrl(url) {
     return userName.replace("\"", '');
 }*/
 
-function getAnimeList(doc) {
-    var allAnime = [], elements = getElements(doc, { "tag": "a" });
-
-    for (var i = 0; i < elements.length; i++) {
-        var href = elements[i].href;
-        if (href.indexOf("/anime/") != -1 && href.indexOf("ownlist") == -1
-            && allAnime.indexOf(href) == -1 && href.indexOf("/video") == -1)
-            allAnime.push(elements[i].href);
-    }
-
-    return allAnime;
-}
-
-function showSharedPTWAnime(niceView) {
-    var user1, user2;
-    var user1List, user2List;
-}
-
 const mal = "https://myanimelist.net/"
 var url = window.location.href;
 
+//Check options
 chrome.storage.local.get(null, function (items) {
 
-    if (items["Eliminate"]) {
-        if (url.indexOf(mal + "topanime") == 0) {
-            updateAnimeTable({ "class": "ranking-list" }, "Completed", "?limit=<0+50>", { "tag": "tbody" },
-                items["BonusEliminate"], { "class": "information di-ib mt4" });
-            nextTargets = { "class": "link-blue-box next" };
-        }
-        else if (url.indexOf(mal + "anime/genre") == 0 || url.indexOf(mal + "anime/producer") == 0) {
-            updateAnimeTable({ "class": "seasonal-anime js-seasonal-anime" }, "CMPL", "?page=<1+1>",
-                { "class": "seasonal-anime-list clearfix" }, items["BonusEliminate"], { "class": "title-text" });
-        }
-        else if (url.indexOf(mal + "anime/season") == 0) {
-            updateAnimeTable({ "class": "seasonal-anime js-seasonal-anime" }, "CMPL", null, null, false, null);
-        }
-        else if (url.indexOf(mal + "anime.php?") == 0) {
-            updateAnimeTable({ "tag": "tr" }, ["CMPL", "pt4"], "&show=<0+50>", { "tag": "tbody", "number": 2 },
-                items["BonusEliminate"], { "class": "pt4" });
-        }
-    }
-    if (items["Shared"]) {
-        if (url.indexOf(mal + "animelist") == 0) {
-            // Add new option to page
-            var links = document.getElementsByTagName("a"), found = false, element;
+    if (items["Eliminate"])
+        eliminateOption(items);
 
-            for (var i = 0; i < links.length; i++)
-                if (links[i].href.indexOf("sharedanime.php") != -1) {
-                    found = true;
-                    element = links[i];
-                    break;
-                }
-            if(found){
-                console.log(element.parentElement);
-                console.log(element);
-                element.parentElement.innerHTML += `| <a href="/sharedanime.php?u1=BaconDroid&amp;u2=NoxErinys?ptw">Shared PTW Anime</a>`;
-            }
-        }
-        else if (url.indexOf(mal + "shared.php") == 0) {
-            showSharedPTWAnime(items["BonusShared"]);
-        }
-    }
+    if (items["Shared"])
+        sharedOption(items);
+
+
 });
