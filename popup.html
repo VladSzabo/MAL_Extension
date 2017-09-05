@@ -142,41 +142,39 @@
         <div class="form-group">
             <div class="checkbox">
                 <label>
-                    <input id="check" type="checkbox" name="Shared" checked> See shared PTW anime with users
+                    <input class="check" type="checkbox" name="Shared" checked> See shared PTW anime with users
                 </label>
-                <label id="bonusShared" class="tab">
-                        <input id="check" type="checkbox" name="BonusShared"> Detailed view (longer load)
+                <label class="bonusShared tab">
+                        <input class="check" type="checkbox" name="BonusShared"> Detailed view (longer load)
                     </label>
                 <!--<label>
-                    <input id="check" type="checkbox" name="Advanced" checked> More advanced search 
+                    <input class="check" type="checkbox" name="Advanced" checked> More advanced search 
                 </label>-->
                 <label>
-                    <input id="check" type="checkbox" name="Websites" checked> See ratings from other websites
+                    <input class="check" type="checkbox" name="Websites" checked> See ratings from other websites
                 </label>
-                <label id="bonusWebsites" class="tab">
-                        <input id="check" type="checkbox" name="Kitsu"> Kitsu
+                <label class="bonusWebsites tab">
+                        <input class="check" type="checkbox" name="Kitsu"> Kitsu
                     </label> <br>
-                <label id="bonusWebsites" class="tab">
-                        <input id="check" type="checkbox" name="AniDB"> AniDB
+                <label class="bonusWebsites tab">
+                        <input class="check" type="checkbox" name="AniDB"> AniDB
                     </label>
                 <label>
-                    <input id="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
+                    <input class="check" type="checkbox" name="Eliminate" checked> Eliminate completed anime
                 </label>
-                <label id="bonusEliminate" class="tab">
-                    <input id="check" type="checkbox" name="BonusEliminate"> Keep table size (longer load)
+                <label class="bonusEliminate tab">
+                    <input class="check" type="checkbox" name="BonusEliminate"> Keep table size (longer load)
                 </label>
             </div>
         </div>
 
         <label>
             Update Anime:
-            <input type="text" class="form-control" id="search" placeholder="Search"
-                   style="height: 1.8em; margin-top: 0.3em; width: 18em;">
+            <input type="text" class="form-control" id="search" placeholder="Search" autocomplete="off"
+                   style="height: 1.9em; margin-top: 0.3em; width: 18em;" >
         </label>
 
-        <div id="topSearchResultList" class="hidden">
-        </div>
-
+        <div id="topSearchResultList" class="hidden"></div>
         <hr style="margin: 0px; padding: 0px;">
 
         <div class="pull-right" style="padding: 0.2em">
@@ -191,6 +189,7 @@
 
         </div>
 
+        <script src="scripts/jquery-3.2.1.js"></script>
         <script src="scripts/popup.js"></script>
 </body>
 

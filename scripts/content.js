@@ -248,11 +248,11 @@ function showSharedPTWAnime(niceView) {
                 content.removeChild(content.getElementsByClassName("spaceit")[0]);
                 content.innerHTML += `<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr>
                     <td class="borderClass bgColor1" valign="top" width="50">  </td>
-                    <td class="borderClass bgColor1 ac fw-b" valign="top" sort="up"><a id="title" href="#">Title</a></td>
+                    <td class="borderClass bgColor1 ac fw-b" valign="top" sort="up"><a id="title" href="#">Title<i class="fa fa-sort ml2"></i></a></td>
                     <td class="borderClass bgColor1 ac fw-b" width="45" nowrap="" sort="up"><a id="type" href="#">Type<i class="fa fa-sort ml2"></i></a></td>
                     <td class="borderClass bgColor1 ac fw-b" width="40" nowrap="" sort="up"><a id="eps" href="#">Eps.<i class="fa fa-sort ml2"></i></a></td>
                     <td class="borderClass bgColor1 ac fw-b" width="50" nowrap="" sort="up"><a id="score" href="#">Score<i class="fa fa-sort ml2"></i></a></td>
-                    <td class="borderClass bgColor1 ac fw-b" width="80" nowrap="" sort="up"><a id="date" href="#">Date<i class="fa fa-sort ml2"></i></a></td>
+                    <td class="borderClass bgColor1 ac fw-b" width="80" nowrap="" sort="up"><a id="date" href="#">Date</a></td>
                     <td class="borderClass bgColor1 ac fw-b" width="75" nowrap="" sort="up"><a id="members" href="#">Members<i class="fa fa-sort ml2"></i></a></td>
                     </tr>`;
 
