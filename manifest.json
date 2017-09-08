@@ -3,7 +3,11 @@
 
   "name": "MAL Extension",
   "version": "1.0",
-  "description": "MAL searching improved",
+  "description": "An extension for MyAnimeList",
+
+  "icons": { "16": "images/icon16.png",
+             "48": "images/icon48.png",
+             "128": "images/icon128.png" },
 
   "content_scripts": [{
     "matches": ["https://myanimelist.net/*"],
@@ -14,5 +18,6 @@
     "default_icon": "images/icon.png",
     "default_popup": "popup.html"
   },
+
   "permissions": ["activeTab", "storage", "https://kitsu.io/*", "https://anidb.net/*"]
 }

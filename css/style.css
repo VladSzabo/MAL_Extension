@@ -1,0 +1,257 @@
+body {
+    width: 20em;
+}
+
+a {
+    color: #1d439b;
+}
+
+.container {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.form-group {
+    padding-top: 0.3em;
+}
+
+.tab {
+    padding-left: 2.7em !important;
+}
+
+#topSearchResultList {
+    background-color: #fff;
+    border: #bebebe 1px solid;
+    border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 10px 15px 5px rgba(0, 0, 0, .2);
+    box-shadow: 0 10px 15px 5px rgba(0, 0, 0, .2);
+    display: block;
+    z-index: 100;
+    color: #2e51a2;
+    width: 18em;
+    margin-top: -6px;
+}
+
+.list {
+    background-color: #fff;
+    border-bottom: #ebebeb 1px solid;
+    cursor: pointer;
+    padding: 2px;
+    position: relative;
+    text-align: left
+}
+
+.list a {
+    display: block;
+    text-decoration: none;
+    font-size: 11px;
+    font-family: Verdana, Arial;
+}
+
+.list.focus {
+    background-color: #e1e7f5;
+}
+
+.list .on .image {
+    height: 90px;
+    width: 58px;
+}
+
+.list .off .image {
+    height: 38px;
+    width: 58px;
+}
+
+.list .image {
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: #ebebeb 1px solid;
+    position: absolute;
+}
+
+.list .on .info {
+    min-height: 92px;
+}
+
+.list .off .info {
+    height: 40px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
+.list .info {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 65px;
+}
+
+.list .off .info.anime .name {
+    color: #2e51a2;
+    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list .on .info .name {
+    color: #2e51a2;
+    font-weight: 700;
+    line-height: 18px;
+    overflow: visible;
+    text-overflow: inherit;
+    white-space: normal;
+}
+
+.list .on .info .media-type {
+    color: #44454a;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 15px;
+}
+
+.list .off .info.anime .media-type {
+    color: #787878;
+    font-size: 9px;
+    line-height: 15px;
+}
+
+.list .on .info .extra-info {
+    color: #44454a;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 15px;
+}
+
+#showUpdateAnime {
+    display: table;
+    margin-top: -6px;
+    border: #ebebeb 1px solid;
+    border-radius: 1px;
+    background-color: #f6f6f6;
+    width: 18em;
+}
+
+.flex-center{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+#eliminateAnime{
+    display: table-cell;
+    width: 10%;
+    vertical-align: top;
+    text-align: center;
+}
+
+#animeContainer{
+    display: table-cell;
+    width: 90%;
+    padding-left: 0.3em;
+}
+
+#animeTitle {
+    width: 100%;
+    margin-bottom: 0.3em;
+    margin-top: 0.3em;
+    vertical-align: middle;
+}
+
+#animeDetails{
+    margin-bottom: 0.3em;
+    overflow: auto; 
+}
+
+#animeImage {
+    float: left;
+    vertical-align: top;
+}
+
+#animeTable{
+    float: right;
+    vertical-align: top;
+}
+
+#animeImage > a > img {
+    height: 97px;
+    width: 4.5em;
+    border: #ffffff 1px solid;
+}
+
+table {
+    font-size: 10px;
+    line-height: 1.5em;
+    font-family: Verdana, Arial;
+    width: 100%;
+}
+
+.spaceit-top {
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+}
+
+.spaceit {
+    margin: 3px 0;
+    padding: 3px 0;
+}
+
+.inputtext {
+    border-color: #d8d8d8;
+    border-style: solid;
+    border-width: 1px;
+    font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+    font-size: 10px;
+    padding: 2px;
+}
+
+div.vertical-line {
+    width: 1px;
+    background-color: #a3a3a3;
+    height: 100%;
+    float: right;
+}
+
+.spaceit>select,
+.spaceit-top>select {
+    width: 10.4em;
+}
+
+.close-button{
+    display: block;
+    font-size: 16px;
+    color: #777;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+    margin-top: 0.3em;
+}
+
+.close-button:hover{
+    color: red;
+    text-decoration: none;
+}
+
+.loader {
+  border: 12px solid #e5e5e5;
+  border-radius: 50%;
+  border-top: 12px solid #bfbfbf;
+  width: 4em;
+  height: 4em;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#updateMessage {
+    margin-top: 3px;
+    font-size: 10px;
+}

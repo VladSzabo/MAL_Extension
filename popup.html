@@ -3,135 +3,11 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <title>MAL Extension</title>
+
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/cosmo/bootstrap.min.css">
-    <style>
-        body {
-            width: 20em
-        }
-
-        a {
-            color: #1d439b;
-        }
-
-        .container {
-            padding-left: 1em;
-            padding-right: 1em;
-        }
-
-        .form-group {
-            padding-top: 0.3em;
-        }
-
-        .tab {
-            padding-left: 2.7em !important;
-        }
-
-        #topSearchResultList {
-            background-color: #fff;
-            border: #bebebe 1px solid;
-            border-radius: 0 0 6px 6px;
-            -webkit-box-shadow: 0 10px 15px 5px rgba(0, 0, 0, .2);
-            box-shadow: 0 10px 15px 5px rgba(0, 0, 0, .2);
-            display: block;
-            z-index: 100;
-            color: #2e51a2;
-            width: 18em;
-            margin-top: -6px;
-        }
-
-        .list {
-            background-color: #fff;
-            border-bottom: #ebebeb 1px solid;
-            cursor: pointer;
-            padding: 2px;
-            position: relative;
-            text-align: left
-        }
-
-        .list a {
-            display: block;
-            text-decoration: none;
-            font-size: 11px;
-            font-family: Verdana, Arial;
-        }
-
-        .list.focus {
-            background-color: #e1e7f5;
-        }
-
-        .list .on .image {
-            height: 90px;
-            width: 58px;
-        }
-
-        .list .off .image {
-            height: 38px;
-            width: 58px;
-        }
-
-        .list .image {
-            background-position: center top;
-            background-repeat: no-repeat;
-            background-size: cover;
-            border: #ebebeb 1px solid;
-            position: absolute;
-        }
-
-        .list .on .info {
-            min-height: 92px;
-        }
-
-        .list .off .info {
-            height: 40px;
-            padding-bottom: 4px;
-            padding-top: 4px;
-        }
-
-        .list .info {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            padding-left: 65px;
-        }
-
-        .list .off .info.anime .name {
-            color: #2e51a2;
-            line-height: 15px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .list .on .info .name {
-            color: #2e51a2;
-            font-weight: 700;
-            line-height: 18px;
-            overflow: visible;
-            text-overflow: inherit;
-            white-space: normal;
-        }
-
-        .list .on .info .media-type {
-            color: #44454a;
-            font-size: 10px;
-            font-weight: 400;
-            line-height: 15px;
-        }
-
-        .list .off .info.anime .media-type {
-            color: #787878;
-            font-size: 9px;
-            line-height: 15px;
-        }
-
-        .list .on .info .extra-info {
-            color: #44454a;
-            font-size: 10px;
-            font-weight: 400;
-            line-height: 15px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 
 </head>
 
@@ -175,7 +51,83 @@
         </label>
 
         <div id="topSearchResultList" class="hidden"></div>
-        <hr style="margin: 0px; padding: 0px;">
+
+        <div id="showUpdateAnime" class="hidden">
+            <div class="hidden" id="csrf_token"></div>
+            <div id="animeContainer" class="hidden">
+                <div id="animeTitle">
+                    <a target="_blank"></a>
+                </div>
+                <div id="animeDetails">
+                    <div id="animeImage">
+                        <a target="_blank"><img></img></a>
+                    </div>
+
+                    <div id="animeTable">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td class="spaceit-top">Status:</td>
+                                    <td class="spaceit-top">
+                                        <select name="myinfo_status" id="myinfo_status" class="inputtext js-anime-status-dropdown">
+                                            <option value="1">Watching</option>
+                                            <option value="2">Completed</option>
+                                            <option value="3">On-Hold</option>
+                                            <option value="4">Dropped</option>
+                                            <option value="6">Plan to Watch</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spaceit">Eps Seen:</td>
+                                    <td class="spaceit">
+                                        <input type="text" id="myinfo_watchedeps" name="myinfo_watchedeps" size="3" class="inputtext" value="0">                                        /
+                                        <span id="curEps"></span>
+                                        <a href="javascript:void(0)" class="js-anime-increment-episode-button">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="spaceit">Your Score:</td>
+                                    <td class="spaceit">
+                                        <select name="myinfo_score" id="myinfo_score" class="inputtext">
+                                <option selected="selected" value="0">Select</option>
+                                <option value="10">(10) Masterpiece</option>
+                                <option value="9">(9) Great</option>
+                                <option value="8">(8) Very Good</option>
+                                <option value="7">(7) Good</option>
+                                <option value="6">(6) Fine</option>
+                                <option value="5">(5) Average</option>
+                                <option value="4">(4) Bad</option>
+                                <option value="3">(3) Very Bad</option>
+                                <option value="2">(2) Horrible</option>
+                                <option value="1">(1) Appalling</option>
+                            </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>
+                                        <input type="button" name="myinfo_submit" value="Update" class="inputButton btn-middle flat">
+                                        <small><a id="editLink" target="_blank" href="">Edit Details</a></small>
+                                        <div id="updateMessage" class="hidden">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="eliminateAnime" class="hidden">
+                <a href="javascript:void(0)" class="close-button">✖</a>
+            </div>
+
+            <div class="loader hidden"></div>
+        </div>
+
+        <hr style="margin: 0px; padding: 0px; margin-top: 0.3em">
 
         <div class="pull-right" style="padding: 0.2em">
 
@@ -189,7 +141,7 @@
 
         </div>
 
-        <script src="scripts/jquery-3.2.1.js"></script>
+        <script src="scripts/jquery-3.2.1.min.js"></script>
         <script src="scripts/popup.js"></script>
 </body>
 

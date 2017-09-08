@@ -539,7 +539,7 @@ function addWebsitesScore(items) {
                     document.getElementById("aniDB").innerHTML += `
                             <div style="display: table-cell; width: 25%; padding: 10px; vertical-align: middle;">
                             <p style="font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif; font-size: 16px;" align="center">
-                            Score <strong>#` + score + `</strong></p>
+                            Score <strong>` + score + `</strong></p>
                             </div>
                             <div style="display: table-cell; width: 25%; padding: 10px; vertical-align: middle;">
                             <p style="font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif; font-size: 16px;" align="center">
